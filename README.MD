@@ -1,7 +1,7 @@
 # The Reconstruction of Super ZZT
 
-The Reconstruction of Super ZZT is a reverse-engineered recreation of the source code to the earliest known release of
-Super ZZT, Super ZZT 1.1.
+The Reconstruction of Super ZZT is a reverse-engineered recreation of the source code to the last official release of
+Super ZZT, Super ZZT 2.0.
 
 ## Frequently Asked Questions
 
@@ -36,7 +36,7 @@ decompression routine for its ANSI art graphical displays. As I did not manage t
 licensing terms for said routine, UNCRLIB.PAS contains a clean implementation of it. This ensures that the
 binary produced by this repository is MIT-licensed, even if a non-consequential part of it differs. However,
 it is possible to replace UNCRLIB.PAS with the original implementation and get a .EXE byte-accurate to
-Super ZZT 1.1.
+Super ZZT 2.0.
 
 ### Why did the source code have to be reconstructed?
 

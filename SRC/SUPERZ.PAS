@@ -144,10 +144,10 @@ begin
 	SoundUninstall;
 	SoundClearQueue;
 
-	VideoInstall(80, Black);
+	VideoUninstall;
 	if IsRegistered then begin
 		Writeln;
-		Writeln('  Registered Version -- Thank you for playing ZZT.');
+		Writeln('  Registered Version -- Thank you for playing Super ZZT.');
 		Writeln;
 	end else begin
 		UnCrunch(S_REGISTCSIData, VideoTextPointer^, S_REGISTCSISize);

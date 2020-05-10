@@ -634,38 +634,48 @@ procedure WorldSave(filename, extension: TSmallString);
 		unk1: integer;
 		ptr: pointer;
 		version: integer;
+	label OnError;
 	begin
 		BoardClose;
 		DrawStatusMessage('Saving...');
 
 		Assign(f, filename + extension);
 		Rewrite(f, 1);
-		if DisplayIOError then exit;
 
-		ptr := IoTmpBuf;
-		FillChar(IoTmpBuf^, WORLD_FILE_HEADER_SIZE, 0);
-		version := -2;
-		Move(version, ptr^, SizeOf(version));
-		AdvancePointer(ptr, SizeOf(version));
+		if not DisplayIOError then begin
+			ptr := IoTmpBuf;
+			FillChar(IoTmpBuf^, WORLD_FILE_HEADER_SIZE, 0);
+			version := -2;
+			Move(version, ptr^, SizeOf(version));
+			AdvancePointer(ptr, SizeOf(version));
 
-		Move(World.BoardCount, ptr^, SizeOf(World.BoardCount));
-		AdvancePointer(ptr, SizeOf(World.BoardCount));
+			Move(World.BoardCount, ptr^, SizeOf(World.BoardCount));
+			AdvancePointer(ptr, SizeOf(World.BoardCount));
 
-		Move(World.Info, ptr^, SizeOf(World.Info));
-		AdvancePointer(ptr, SizeOf(World.Info));
+			Move(World.Info, ptr^, SizeOf(World.Info));
+			AdvancePointer(ptr, SizeOf(World.Info));
 
-		BlockWrite(f, IoTmpBuf^, WORLD_FILE_HEADER_SIZE);
-		if DisplayIOError then exit;
+			BlockWrite(f, IoTmpBuf^, WORLD_FILE_HEADER_SIZE);
+			if DisplayIOError then goto OnError;
 
-		for i := 0 to World.BoardCount do begin
-			BlockWrite(f, World.BoardLen[i], 2);
-			if DisplayIOError then exit;
+			for i := 0 to World.BoardCount do begin
+				BlockWrite(f, World.BoardLen[i], 2);
+				if DisplayIOError then goto OnError;
 
-			BlockWrite(f, World.BoardData[i]^, World.BoardLen[i]);
-			if DisplayIOError then exit;
+				BlockWrite(f, World.BoardData[i]^, World.BoardLen[i]);
+				if DisplayIOError then goto OnError;
+			end;
+
+			Close(f);
 		end;
 
+		BoardOpen(World.Info.CurrentBoard);
+		ClearDisplayMessage;
+		exit;
+
+	OnError:
 		Close(f);
+		Erase(f);
 		BoardOpen(World.Info.CurrentBoard);
 		ClearDisplayMessage;
 	end;

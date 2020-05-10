@@ -795,6 +795,8 @@ procedure EditorLoop;
 						end else begin
 							BoardOpen(World.Info.CurrentBoard);
 							EditorDrawRefresh;
+							for i := 0 to 3 do
+								Board.Info.NeighborBoards[i] := 0;
 						end;
 					end;
 				end else if i = 1 then begin
